@@ -3,7 +3,8 @@ package com.gabriel.agendamento.service;
 import com.gabriel.agendamento.dto.AgendamentoCreateRequest;
 import com.gabriel.agendamento.dto.AgendamentoResponse;
 import com.gabriel.agendamento.dto.AgendamentoUpdateRequest;
-import com.gabriel.agendamento.model.Agendamento;
+
+import java.util.List;
 
 public interface AgendamentoService {
 
@@ -14,4 +15,6 @@ public interface AgendamentoService {
     void cancelar(Long id);
 
     AgendamentoResponse buscarPorId(Long id);
+
+    List<AgendamentoResponse> listarPorUsuario(Long usuarioId);
 }
