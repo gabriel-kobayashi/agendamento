@@ -1,14 +1,17 @@
 package com.gabriel.agendamento.service;
 
+import com.gabriel.agendamento.dto.AgendamentoCreateRequest;
+import com.gabriel.agendamento.dto.AgendamentoResponse;
+import com.gabriel.agendamento.dto.AgendamentoUpdateRequest;
 import com.gabriel.agendamento.model.Agendamento;
 
 public interface AgendamentoService {
 
-    Agendamento criar(AgendamentoCreateRequest request);
+    AgendamentoResponse criar(AgendamentoCreateRequest request);
 
-    Agendamento atualizar(Long id, AgendamentoUpdateRequest request);
+    AgendamentoResponse atualizar(Long id, AgendamentoUpdateRequest request);
 
     void cancelar(Long id);
 
-    Agendamento buscarPorId(Long id);
+    AgendamentoResponse buscarPorId(Long id);
 }
