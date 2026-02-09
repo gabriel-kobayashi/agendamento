@@ -1,12 +1,14 @@
 package com.gabriel.agendamento.exception;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record ErrorResponse(
         LocalDateTime timestamp,
         int status,
         String error,
         String message,
-        String path
+        String path,
+        List<FieldErrorResponse> fields
 ) {
 }
