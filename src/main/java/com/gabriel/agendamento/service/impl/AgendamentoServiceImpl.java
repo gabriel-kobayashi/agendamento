@@ -77,6 +77,7 @@ public class AgendamentoServiceImpl implements AgendamentoService {
     }
 
     @Override
+    @Transactional
     public List<AgendamentoResponse> listarPorUsuario(Long usuarioId) {
 
         Usuario usuario = usuarioRepository.findById(usuarioId)
