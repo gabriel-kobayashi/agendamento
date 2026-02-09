@@ -3,6 +3,8 @@ package com.gabriel.agendamento.service.impl;
 import com.gabriel.agendamento.dto.AgendamentoCreateRequest;
 import com.gabriel.agendamento.dto.AgendamentoResponse;
 import com.gabriel.agendamento.dto.AgendamentoUpdateRequest;
+import com.gabriel.agendamento.exception.RecursoNaoEncontradoException;
+import com.gabriel.agendamento.exception.RegraDeNegocioException;
 import com.gabriel.agendamento.mapper.AgendamentoMapper;
 import com.gabriel.agendamento.model.Agendamento;
 import com.gabriel.agendamento.model.StatusAgendamento;
@@ -10,7 +12,6 @@ import com.gabriel.agendamento.model.Usuario;
 import com.gabriel.agendamento.repository.AgendamentoRepository;
 import com.gabriel.agendamento.repository.UsuarioRepository;
 import com.gabriel.agendamento.service.AgendamentoService;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,7 @@ public class AgendamentoServiceImpl implements AgendamentoService {
         validarIntervalo(request.dataInicio(), request.dataFim());
 
         Usuario usuario = usuarioRepository.findById(request.usuarioId())
-                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Usuário não encontrado"));
 
         Agendamento agendamento = AgendamentoMapper.toEntity(request, usuario);
 
@@ -50,7 +51,7 @@ public class AgendamentoServiceImpl implements AgendamentoService {
         validarIntervalo(request.dataInicio(), request.dataFim());
 
         Agendamento agendamento = agendamentoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Agendamento não encontrado"));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Agendamento não encontrado"));
 
         AgendamentoMapper.updateEntity(agendamento, request);
 
@@ -61,7 +62,7 @@ public class AgendamentoServiceImpl implements AgendamentoService {
     public void cancelar(Long id) {
 
         Agendamento agendamento = agendamentoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Agendamento não encontrado"));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Agendamento não encontrado"));
 
         agendamento.setStatus(StatusAgendamento.CANCELADO);
     }
@@ -71,7 +72,7 @@ public class AgendamentoServiceImpl implements AgendamentoService {
     public AgendamentoResponse buscarPorId(Long id) {
 
         Agendamento agendamento = agendamentoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Agendamento não encontrado"));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Agendamento não encontrado"));
 
         return AgendamentoMapper.toResponse(agendamento);
     }
@@ -81,7 +82,7 @@ public class AgendamentoServiceImpl implements AgendamentoService {
     public List<AgendamentoResponse> listarPorUsuario(Long usuarioId) {
 
         Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Usuário não encontrado"));
 
         return agendamentoRepository.findByUsuario(usuario)
                 .stream()
@@ -91,7 +92,7 @@ public class AgendamentoServiceImpl implements AgendamentoService {
 
     private void validarIntervalo(LocalDateTime inicio, LocalDateTime fim) {
         if (!inicio.isBefore(fim)) {
-            throw new IllegalArgumentException("Data de início tem que ser anterior à data de fim");
+            throw new RegraDeNegocioException("Data de início tem que ser anterior à data de fim");
         }
     }
 }

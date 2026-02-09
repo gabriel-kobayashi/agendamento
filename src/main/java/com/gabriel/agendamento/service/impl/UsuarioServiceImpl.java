@@ -2,10 +2,10 @@ package com.gabriel.agendamento.service.impl;
 
 import com.gabriel.agendamento.dto.UsuarioCreateRequest;
 import com.gabriel.agendamento.dto.UsuarioResponse;
+import com.gabriel.agendamento.exception.RecursoNaoEncontradoException;
 import com.gabriel.agendamento.model.Usuario;
 import com.gabriel.agendamento.repository.UsuarioRepository;
 import com.gabriel.agendamento.service.UsuarioService;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +33,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public Usuario buscarUsuarioPorId(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Usuário não encontrado"));
     }
 
 }
